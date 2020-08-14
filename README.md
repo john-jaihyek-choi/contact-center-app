@@ -12,11 +12,10 @@ Interactive phone contact center application built utilizing Amazon Connect, Dyn
 ## Resources, tools, and runtime used
 - [Amazon Connect](https://aws.amazon.com/connect/)
 - [AWS Lambda](https://aws.amazon.com/lambda/)
-- [Amazon Lex]()
-- [Amazon CloudWatch]()
-- [Amazon DynamoDB]()
-- [Amazon CloudWatch]()
-- [Amazon API Gateway]()
-- [Node.js]()
-- [Serverless]()
+- [Amazon DynamoDB](https://aws.amazon.com/dynamobd/)
+- [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/)
+- [Amazon API Gateway](https://aws.amazon.com/api-gateway/)
+- [Amazon Lex](https://aws.amazon.com/lex/)
+- [Node.js](https://nodejs.org/en/)
+- [Serverless](https://www.serverless.com/)
 
