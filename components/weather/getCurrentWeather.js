@@ -22,7 +22,7 @@ module.exports.getCurrentWeather = async (event, context, callback) => {
   const data = await fetch(url)
     .then(promise => promise.json())
     .then(data => data)
-    .catch(err => callback(null, response(err.statusCode, err)))
+    .catch(err => callback(null, response(err.statusCode, err)));
     
     callback(null, {
       statusCode: 200,
