@@ -3,9 +3,6 @@ service: contact-center-app
 custom:
   settings:
     USERS_TABLE: users
-    API_KEYS: {
-      owm: 64032490501d7fa0101966a030177747
-    }
 
 provider:
   name: aws
@@ -55,12 +52,6 @@ functions:
     - http:
         path: /user/delete/{phoneNumber}
         method: delete
-  getCurrentWeather:
-    handler: components/weather/getCurrentWeather.getCurrentWeather
-    events:
-    - http:
-        path: http://api.openweathermap.org/data/2.5/weather?q={cityName}&appid={self:custom.settings.API_KEYS.owm}
-        method: get
 
 resources:
   Resources:
