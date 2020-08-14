@@ -1,0 +1,79 @@
+service: contact-center-app
+
+custom:
+  settings:
+    USERS_TABLE: users
+    API_KEYS: {
+      owm: 64032490501d7fa0101966a030177747
+    }
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  profile: serverless-admin
+  environment: ${self:custom.settings}
+  region: us-west-2
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.USERS_TABLE}"
+    - Effect: "Allow"
+      Action:
+        - "lambda:*"
+      Resource:
+        - "*"
+
+functions:
+  createUser:
+    handler: components/users/createUser.createUser
+    events:
+    - http:
+        path: /user/create
+        method: post
+  getUser:
+    handler: components/users/getUser.getUser
+    events:
+    - http:
+        path: /user/{phoneNumber}
+        method: get
+  updateUser:
+    handler: components/users/updateUser.updateUser
+    events:
+    - http:
+        path: /user/update/{phoneNumber}/{fName}/{lName}
+        method: put
+  deleteUser:
+    handler: components/users/deleteUser.deleteUser
+    events:
+    - http:
+        path: /user/delete/{phoneNumber}
+        method: delete
+  getCurrentWeather:
+    handler: components/weather/getCurrentWeather.getCurrentWeather
+    events:
+    - http:
+        path: http://api.openweathermap.org/data/2.5/weather?q={cityName}&appid={self:custom.settings.API_KEYS.owm}
+        method: get
+
+resources:
+  Resources:
+    PostsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "phoneNumber"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "phoneNumber"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.settings.USERS_TABLE}
