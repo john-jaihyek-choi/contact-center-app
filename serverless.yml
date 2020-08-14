@@ -52,6 +52,12 @@ functions:
     - http:
         path: /user/delete/{phoneNumber}
         method: delete
+  cityWeather:
+    handler: components/users/deleteUser.deleteUser
+    events:
+    - http:
+        path: /weather/{cityName}
+        method: get
 
 resources:
   Resources:
