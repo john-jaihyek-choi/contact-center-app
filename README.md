@@ -40,7 +40,7 @@ Interactive phone contact center application built utilizing Amazon Connect, Dyn
 
 
 ## Notes
-- [Google drive notes]()
+- [Google drive notes](https://drive.google.com/drive/folders/13E3P1bX-BndtGd4sM6ZK-oJWlFKMM76K?usp=sharing)
 
 
 ## Key Features
