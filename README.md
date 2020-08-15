@@ -117,76 +117,76 @@ resources: 43
 Once successfully deployed, check your AWS Lambda and see if all the functions have been created properly
 
 ### Exporting Amazon Connect contact flows
-Since the contact flows cannot be installed automatically, you will need to export all the existing contact flows from [my Amazon Connect instance](https://vf-assessment.awsapps.com/connect/login)
+- Since the contact flows cannot be installed automatically, you will need to export all the existing contact flows from [my Amazon Connect instance](https://vf-assessment.awsapps.com/connect/login)
 
-If you click [my Amazon Connect instance](https://vf-assessment.awsapps.com/connect/login), you will be taken to a log-in page
+- If you click [my Amazon Connect instance](https://vf-assessment.awsapps.com/connect/login), you will be taken to a log-in page
 
 Input the following log-in credentials (This account will only have viewing abilities and exporting abilities):
     ID: githubUser
     Pass: Password123
 
-once you log in, click the Contact Flows from the Routing tab on the left
+- once you log in, click the Contact Flows from the Routing tab on the left
 
-Then find all contact starting with "VF" (total of 18, but can increase as I update)
+- Then find all contact starting with "VF" (total of 18, but can increase as I update)
 
-Click on one of them and you will see "Export flow(beta)" button on the right top
+- Click on one of them and you will see "Export flow(beta)" button on the right top
 
-Click the button and save in to a desired local directory
+- Click the button and save in to a desired local directory
 
-Repeat the above process until you export all of its content
+- Repeat the above process until you export all of its content
 
 ### Exporting Amazon Lex Intents
-Lastly, you need to export Amazon Lex bot to listen for customer's intent on your app
+- Lastly, you need to export Amazon Lex bot to listen for customer's intent on your app
 
-Locate to your /contact-center-app/lexBots directory and there should be 2 .json files
+- Locate to your /contact-center-app/lexBots directory and there should be 2 .json files
 
-Go to your [Amazon Lex account](https://aws.amazon.com/lex/) and log-in
+- Go to your [Amazon Lex account](https://aws.amazon.com/lex/) and log-in
 
-After you log in, click Bots on the left tab and click the "Action" dropdown button next to create button
+- After you log in, click Bots on the left tab and click the "Action" dropdown button next to create button
 
-Follow their procedure and import two lexBot files
+- Follow their procedure and import two lexBot files
 
 ### Add Amazon Connect Instance
-To start using Amazon Connect, you need to set up an instance
+- To start using Amazon Connect, you need to set up an instance
 
-Please go to [Amazon Connect](https://console.aws.amazon.com/connect/home?p=cnnt&cp=bn&ad=c) and log-in
+- Please go to [Amazon Connect](https://console.aws.amazon.com/connect/home?p=cnnt&cp=bn&ad=c) and log-in
 
-Once you log in, you will be taken to Amazon Connect Virtual Contact Center Instances page
+- Once you log in, you will be taken to Amazon Connect Virtual Contact Center Instances page
 
-Click Add an Instance button on the left and follow the basic procedure to make your instance
+- Click Add an Instance button on the left and follow the basic procedure to make your instance
 
 ### Set up Routing Profile and Agent Profiles
-You will need to set up routing profile and agent profile manually since they dont have import options
+- You will need to set up routing profile and agent profile manually since they dont have import options
 
-Refer to [my Amazon Connect profile](https://vf-assessment.awsapps.com/connect/login) to set up a proper routing and agent profiles suitable for this implementation
+- Refer to [my Amazon Connect profile](https://vf-assessment.awsapps.com/connect/login) to set up a proper routing and agent profiles suitable for this implementation
 
 ### Configuring your Amazon Connect for Lambda and Lex
-Now that you are all prepared, we need to configure your Amazon Connect to be able to call Lambda functions and use Lex bots
+- Now that you are all prepared, we need to configure your Amazon Connect to be able to call Lambda functions and use Lex bots
 
-From the Amazon Connect Virtual Contact Center Instances page, click on your instance
+- From the Amazon Connect Virtual Contact Center Instances page, click on your instance
 
-Then click on Contact Flows tab on the left
+- Then click on Contact Flows tab on the left
 
-You will see a section for Amazon Lex and AWS Lambda
+- You will see a section for Amazon Lex and AWS Lambda
 
-Select the proper region for each of them and add all of the Lambda Functions and Amazon Lex bots you have that is relevant to this instance
+- Select the proper region for each of them and add all of the Lambda Functions and Amazon Lex bots you have that is relevant to this instance
 
 ### Final tweeks
-Since you've imported all the contact flows from Connect instance, our arn for Lambda invokation are different
+- Since you've imported all the contact flows from Connect instance, our arn for Lambda invokation are different
 
-This means you need to make sure that you are adjusting the changes
+- This means you need to make sure that you are adjusting the changes
 
-Unfortunately, this needs to be done manually:
+- Unfortunately, this needs to be done manually:
     - Click into each of the contact flows that has Invoke AWS Lambda function block
     - Once you navigate to the correct block and click it, you will see a dropdown
     - Select the corresponding function that serves its need (ex. createUser, updateUser, etc)
 
-Once Lambda is properly set, check Lex Bots again too:
+- Once Lambda is properly set, check Lex Bots again too:
     - Click into each of the contact flows that has Get Customer Input which uses Amazon Lex
     - Once you navigate to the correct block and click it, you will see a dropdown
     - Select the corresponding lex bot to use for that block (ex. userRegisterBot and weatherBot)
 
 ### Finalize and publish contact flow
-Finally, make sure to publish all the changes on your contact flow and try calling the number associated with your Connect Instance
+- Finally, make sure to publish all the changes on your contact flow and try calling the number associated with your Connect Instance
 
 
