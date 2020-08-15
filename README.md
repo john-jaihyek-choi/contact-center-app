@@ -3,6 +3,9 @@ Contact Center App
 
 Interactive phone contact center application built utilizing Amazon Connect, DynamoDB, Lambda, Node.js
 
+## Live Demo
+<a href="tel:+1-509-260-4508">+1 (509) 260-4508</a>
+
 ## Table of content
 
 - [Resources](#resources,tools,and-runtime-used)
