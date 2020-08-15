@@ -97,7 +97,7 @@ phoneNumber (String) | fName (String) | lName (String)
 - This application uses multiple AWS Lambda functions which hits the REST API to affect the DynamoDB usersTable
 
 #### helper function (response)
-```
+```javascript
 function response (statusCode, message) {
   const res = {
     statusCode: statusCode,
@@ -109,7 +109,7 @@ function response (statusCode, message) {
 ```
 
 #### createUser.js
-```
+```javascript
 module.exports.createUser = (event, context, callback) => {
   console.log("event", event);
   const reqBody = {
@@ -151,7 +151,7 @@ module.exports.createUser = (event, context, callback) => {
 ```
 
 #### getUser.js
-```
+```javascript
 module.exports.getUser = (event, context, callback) => {
   console.log(event); // for error handling
   const phoneNumber = event.Details.Parameters.phoneNumber.match(/\d{10}$/)[0];
@@ -176,7 +176,7 @@ module.exports.getUser = (event, context, callback) => {
 
 
 #### deleteUser.js
-```
+```javascript
 module.exports.deleteUser = (event, context, callback) => {
   console.log(event) // For error handling
   const phoneNumber = event.Details.Parameters.phoneNumber.match(/\d{10}$/)[0];
@@ -197,7 +197,7 @@ module.exports.deleteUser = (event, context, callback) => {
 
 
 #### updateUser.js
-```
+```javascript
 module.exports.updateUser = (event, context, callback) => {
   console.log(event);
   const phoneNumber = event.Details.Parameters.phoneNumber.match(/\d{10}$/)[0];
@@ -251,7 +251,7 @@ npm install
 
 ### Environment setup
 Open your serverless.yml file, and on the very top of the file, edit service name to your desired name:
-```
+```yaml
 service: desired-name
 
 custom:
