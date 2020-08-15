@@ -61,7 +61,7 @@ Interactive phone contact center application built utilizing Amazon Connect, Dyn
     - Caller is directly transferred to John's personal number
 
 ## Getting Started
-First, set up and configure aws and serverless from the below links:
+- First, set up and configure aws and serverless from the below links:
     - [AWS-SDK Node.js](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/getting-started.html)
     - [Serverless](https://www.serverless.com/)
     - [Node.js](https://nodejs.org/en/download/)
