@@ -315,9 +315,9 @@ Once successfully deployed, check your AWS Lambda and see if all the functions h
 
 - If you click [my Amazon Connect instance](https://vf-assessment.awsapps.com/connect/login), you will be taken to a log-in page
 
-Input the following log-in credentials (This account will only have viewing abilities and exporting abilities):
-    ID: githubUser
-    Pass: Password123
+- Input the following log-in credentials (This account will only have viewing abilities and exporting abilities):
+    - ID: githubUser
+    - Pass: Password123
 
 - once you log in, click the Contact Flows from the Routing tab on the left
 
