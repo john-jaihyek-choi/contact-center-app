@@ -5,14 +5,24 @@ Interactive phone contact center application built utilizing Amazon Connect, Dyn
 
 ## Table of content
 
-- [Resources](#resources,-tools,-and-runtime-used)
+- [Resources](#resources,tools,and-runtime-used)
 - [Notes](#notes)
 - [Key Features](#key-features)
 - [Live Demo](#live-demo)
 - [Dial Manual](#dial-manual)
 - [DynamoDB Table](#dynamodb-tables)
-- [Lambda Functions](#getting-started)
+- [Lambda Functions](#lambda-functions)
 - [Getting Started](#getting-started)
+    - [Clone repository](##clone-repository)
+    - [Install dependencies](##install-dependencies)
+    - [Environment setup](##environment-setup)
+    - [Deploy lambda functions](##deploy-lambda-functions)
+    - [Exporting Amazon Connect Contact Flows](##exporting-amazon-connect-contact-flows)
+    - [Add amazon Connect Instance](##add-amazon-connect-instance)
+    - [Set up Routing Profile and Agent Profile](##set-up-routing-profile-and-agent-profile)
+    - [Configuring your Amazon Connect for Lambda and Lex](##configuring-your-amazon-connect-for-lambda-and-lex)
+    - [Final tweeks](##final-tweeks)
+    - [Finalize and publish contact flow](##finalize-and-publish-contact-flow)
 
 
 ## Resources, tools, and runtime used
@@ -25,8 +35,10 @@ Interactive phone contact center application built utilizing Amazon Connect, Dyn
 - [Node.js](https://nodejs.org/en/)
 - [Serverless](https://www.serverless.com/)
 
+
 ## Notes
 - [Google drive notes]()
+
 
 ## Key Features
 - Caller is greeted with names on profile
@@ -39,6 +51,7 @@ Interactive phone contact center application built utilizing Amazon Connect, Dyn
         - By city
         - By zip
 - Caller can transfer directly to John
+
 
 ## Dial Manual
 - Press 1 / 2 / 3:
@@ -59,6 +72,160 @@ Interactive phone contact center application built utilizing Amazon Connect, Dyn
         - Press 1: Caller can get current weather of desired city
 - Press 0:
     - Caller is directly transferred to John's personal number
+
+
+## DynamoDB Table
+- This application uses single DynamoDB Table usersTable:
+    - userTable stores users' phone number and name information and is primarily used for dynamic greeting
+
+#### Table Attributes
+Attribute Name | Attribute Type | Primary Key | Description
+--- | --- | --- | ---
+phoneNumber | String | Yes | Users' phone number
+fName | String | No | User's first name
+lName | String | No | User's last name
+
+#### Example Table
+phoneNumber (String) | fName (String) | lName (String)
+--- | --- | ---
+562xxxxxxx | Spongebob | Squarepants
+213xxxxxxx | Bob | TheBuilder
+909xxxxxxx | Coding | John
+
+
+## Lambda Functions
+- This application uses multiple AWS Lambda functions which hits the REST API to affect the DynamoDB usersTable
+
+#### helper function (response)
+```
+function response (statusCode, message) {
+  const res = {
+    statusCode: statusCode,
+    body: JSON.stringify(message)
+  }
+  console.log(res);
+  return res;
+}
+```
+
+#### createUser.js
+```
+module.exports.createUser = (event, context, callback) => {
+  console.log("event", event);
+  const reqBody = {
+    phoneNumber: event.Details.Parameters.phoneNumber,
+    fName: event.Details.Parameters.fName,
+    lName: event.Details.Parameters.lName
+  }
+
+  if (
+    !reqBody.fName ||
+    reqBody.fName.trim() === '' ||
+    !reqBody.lName ||
+    reqBody.lName.trim() === ''
+  ) {
+    return callback(
+      null,
+      response(400, {
+        error: 'User must have their first and last name.'
+      })
+    );
+  }
+
+  const user = {
+    phoneNumber: String(reqBody.phoneNumber.match(/\d{10}$/)[0]),
+    fName: reqBody.fName,
+    lName: reqBody.lName,
+    createdAt: new Date().toISOString(),
+  }
+
+  return db.put({
+    TableName: usersTable,
+    Item: user
+  }).promise().then(() => {
+    user.statusCode = 201;
+    callback(null, user)
+  })
+    .catch(err => response(null, response(err.statusCode, err)));
+};
+```
+
+#### getUser.js
+```
+module.exports.getUser = (event, context, callback) => {
+  console.log(event); // for error handling
+  const phoneNumber = event.Details.Parameters.phoneNumber.match(/\d{10}$/)[0];
+  const params = {
+    Key: {
+      phoneNumber: phoneNumber
+    },
+    TableName: usersTable
+  }
+
+  return db.get(params).promise()
+    .then(res => {
+      if(res.Item) {
+        res.Item.statusCode = 200;
+        callback(null, res.Item);
+      }
+      else callback(null, response(404, { error: "User Not Found"}))
+    })
+    .catch(err => callback(null, response(err.statusCode, err)));
+};
+```
+
+
+#### deleteUser.js
+```
+module.exports.deleteUser = (event, context, callback) => {
+  console.log(event) // For error handling
+  const phoneNumber = event.Details.Parameters.phoneNumber.match(/\d{10}$/)[0];
+
+  const params = {
+    Key: {
+      phoneNumber: phoneNumber,
+    },
+    TableName: usersTable
+  };
+
+  return db.delete(params)
+    .promise()
+    .then(() => callback(null, response(200, { message: 'User Deleted Successfully'})))
+    .catch(err => callback(null, response(err.statusCode, err)));
+};
+```
+
+
+#### updateUser.js
+```
+module.exports.updateUser = (event, context, callback) => {
+  console.log(event);
+  const phoneNumber = event.Details.Parameters.phoneNumber.match(/\d{10}$/)[0];
+  const { fName, lName } = event.Details.Parameters;
+
+  const params = {
+    TableName: usersTable,
+    Key: {
+      "phoneNumber": phoneNumber
+    },
+    ConditionExpression: "attribute_exists(phoneNumber)",
+    UpdateExpression: "set fName = :f, lName = :l",
+    ExpressionAttributeValues: {
+      ":f": fName,
+      ":l": lName
+    },
+    ReturnValue: "UPDATED_NEW"
+  }
+  
+  return db.update(params)
+    .promise()
+    .then(callback(null, 'Username Updated'))
+    .catch(err => {
+      callback(null, response(err.statusCode, err))
+    });
+};
+```
+
 
 ## Getting Started
 - First, set up and configure aws and serverless from the below links:
