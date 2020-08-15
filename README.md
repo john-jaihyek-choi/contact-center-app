@@ -10,8 +10,7 @@ Interactive phone contact center application built utilizing Amazon Connect, Dyn
 - [Key Features](#key-features)
 - [Live Demo](#live-demo)
 - [Dial Manual](#dial-manual)
-- [Contact Flows](#contact-flows)
-- [DynamoDB Tables](#dynamodb-tables)
+- [DynamoDB Table](#dynamodb-tables)
 - [Lambda Functions](#getting-started)
 - [Getting Started](#getting-started)
 
