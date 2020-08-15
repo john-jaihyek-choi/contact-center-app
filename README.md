@@ -8,11 +8,12 @@ Interactive phone contact center application built utilizing Amazon Connect, Dyn
 - [Resources](#resources,-tools,-and-runtime-used)
 - [Notes](#notes)
 - [Key Features](#key-features)
+- [Live Demo](#live-demo)
 - [Dial Manual](#dial-manual)
-- [Getting Started](#getting-started)
 - [Contact Flows](#contact-flows)
 - [DynamoDB Tables](#dynamodb-tables)
 - [Lambda Functions](#getting-started)
+- [Getting Started](#getting-started)
 
 
 ## Resources, tools, and runtime used
@@ -26,7 +27,7 @@ Interactive phone contact center application built utilizing Amazon Connect, Dyn
 - [Serverless](https://www.serverless.com/)
 
 ## Notes
-- [Google drive notes](https://aws.amazon.com/connect/)
+- [Google drive notes]()
 
 ## Key Features
 - Caller is greeted with names on profile
@@ -39,3 +40,154 @@ Interactive phone contact center application built utilizing Amazon Connect, Dyn
         - By city
         - By zip
 - Caller can transfer directly to John
+
+## Dial Manual
+- Press 1 / 2 / 3:
+    - Caller can join customer queue if there are currently available Sales representatives
+    - When there are no available representatives:
+        - Press 1:
+            - Caller can leave their callback number to be placed in callback queue
+        - Press 2:
+            - Caller can hang up
+- Press 4:
+    - Caller navigates to the Profile menu flow
+        - Press 1: Caller can create a new profile
+        - Press 2: Caller can update an existing profile
+        - Press 3: Caller can delete an existing profile
+        - Press 4: Caller can return to the main menu
+- Press 5:
+    - Caller navigates to the Bonus Features menu
+        - Press 1: Caller can get current weather of desired city
+- Press 0:
+    - Caller is directly transferred to John's personal number
+
+## Getting Started
+First, set up and configure aws and serverless from the below links:
+    - [AWS-SDK Node.js](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/getting-started.html)
+    - [Serverless](https://www.serverless.com/)
+    - [Node.js](https://nodejs.org/en/download/)
+
+*** Make sure that when you are setting up AWS Services, the region is set identical to the profile.region information on serverless.yml
+
+### Clone repository
+Clone this repository to your local device:
+```
+git clone https://github.com/john-jaihyek-choi/contact-center-app.git
+```
+
+### Install dependencies
+Locate to the correct directory where the cloned repository is located
+
+Then install the required dependencies listed in package.json:
+```
+npm install
+```
+
+### Environment setup
+Open your serverless.yml file, and on the very top of the file, edit service name to your desired name:
+```
+service: desired-name
+
+custom:
+  settings:
+    USERS_TABLE: users
+```
+On CONTACT-CENTER-APP directory, create a .env file and include the following information (Note: you will need [Open Weather API](https://openweathermap.org/appid) Key for this):
+```
+OWM_API_KEY=your_API_KEY
+```
+
+Once done, go ahead and save all the changes you made
+
+### Deploy lambda functions
+on the contact-center-app directory, deploy your lambda via serverless:
+```
+sls deploy -v
+```
+Once deployed, you should be seeing something close to this:
+```
+Serverless: Stack update finished...
+Service Information
+service: contact-center-app
+stage: dev
+region: us-west-2
+stack: contact-center-app-dev
+resources: 43
+......
+```
+Once successfully deployed, check your AWS Lambda and see if all the functions have been created properly
+
+### Exporting Amazon Connect contact flows
+Since the contact flows cannot be installed automatically, you will need to export all the existing contact flows from [my Amazon Connect instance](https://vf-assessment.awsapps.com/connect/login)
+
+If you click [my Amazon Connect instance](https://vf-assessment.awsapps.com/connect/login), you will be taken to a log-in page
+
+Input the following log-in credentials (This account will only have viewing abilities and exporting abilities):
+    ID: githubUser
+    Pass: Password123
+
+once you log in, click the Contact Flows from the Routing tab on the left
+
+Then find all contact starting with "VF" (total of 18, but can increase as I update)
+
+Click on one of them and you will see "Export flow(beta)" button on the right top
+
+Click the button and save in to a desired local directory
+
+Repeat the above process until you export all of its content
+
+### Exporting Amazon Lex Intents
+Lastly, you need to export Amazon Lex bot to listen for customer's intent on your app
+
+Locate to your /contact-center-app/lexBots directory and there should be 2 .json files
+
+Go to your [Amazon Lex account](https://aws.amazon.com/lex/) and log-in
+
+After you log in, click Bots on the left tab and click the "Action" dropdown button next to create button
+
+Follow their procedure and import two lexBot files
+
+### Add Amazon Connect Instance
+To start using Amazon Connect, you need to set up an instance
+
+Please go to [Amazon Connect](https://console.aws.amazon.com/connect/home?p=cnnt&cp=bn&ad=c) and log-in
+
+Once you log in, you will be taken to Amazon Connect Virtual Contact Center Instances page
+
+Click Add an Instance button on the left and follow the basic procedure to make your instance
+
+### Set up Routing Profile and Agent Profiles
+You will need to set up routing profile and agent profile manually since they dont have import options
+
+Refer to [my Amazon Connect profile](https://vf-assessment.awsapps.com/connect/login) to set up a proper routing and agent profiles suitable for this implementation
+
+### Configuring your Amazon Connect for Lambda and Lex
+Now that you are all prepared, we need to configure your Amazon Connect to be able to call Lambda functions and use Lex bots
+
+From the Amazon Connect Virtual Contact Center Instances page, click on your instance
+
+Then click on Contact Flows tab on the left
+
+You will see a section for Amazon Lex and AWS Lambda
+
+Select the proper region for each of them and add all of the Lambda Functions and Amazon Lex bots you have that is relevant to this instance
+
+### Final tweeks
+Since you've imported all the contact flows from Connect instance, our arn for Lambda invokation are different
+
+This means you need to make sure that you are adjusting the changes
+
+Unfortunately, this needs to be done manually:
+    - Click into each of the contact flows that has Invoke AWS Lambda function block
+    - Once you navigate to the correct block and click it, you will see a dropdown
+    - Select the corresponding function that serves its need (ex. createUser, updateUser, etc)
+
+Once Lambda is properly set, check Lex Bots again too:
+    - Click into each of the contact flows that has Get Customer Input which uses Amazon Lex
+    - Once you navigate to the correct block and click it, you will see a dropdown
+    - Select the corresponding lex bot to use for that block (ex. userRegisterBot and weatherBot)
+
+### Finalize and publish contact flow
+Finally, make sure to publish all the changes on your contact flow and try calling the number associated with your Connect Instance
+
+
