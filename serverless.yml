@@ -29,35 +29,35 @@ provider:
 
 functions:
   createUser:
-    handler: components/users/createUser.createUser
+    handler: lambdas/users/createUser.createUser
     events:
-    - http:
-        path: /user/create
-        method: post
+      - http:
+          path: /user/create
+          method: post
   getUser:
-    handler: components/users/getUser.getUser
+    handler: lambdas/users/getUser.getUser
     events:
-    - http:
-        path: /user/{phoneNumber}
-        method: get
+      - http:
+          path: /user/{phoneNumber}
+          method: get
   updateUser:
-    handler: components/users/updateUser.updateUser
+    handler: lambdas/users/updateUser.updateUser
     events:
-    - http:
-        path: /user/update/{phoneNumber}/{fName}/{lName}
-        method: put
+      - http:
+          path: /user/update/{phoneNumber}/{fName}/{lName}
+          method: put
   deleteUser:
-    handler: components/users/deleteUser.deleteUser
+    handler: lambdas/users/deleteUser.deleteUser
     events:
-    - http:
-        path: /user/delete/{phoneNumber}
-        method: delete
+      - http:
+          path: /user/delete/{phoneNumber}
+          method: delete
   getCurrentWeather:
-    handler: components/weather/getCurrentWeather.getCurrentWeather
+    handler: lambdas/weather/getCurrentWeather.getCurrentWeather
     events:
-    - http:
-        path: /weather/current/{location}
-        method: get
+      - http:
+          path: /weather/current/{location}
+          method: get
 
 resources:
   Resources:
