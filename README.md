@@ -107,13 +107,13 @@ Interactive phone contact center application built utilizing Amazon Connect, Dyn
 
 ## Architecture Diagram
 
-|                            | Languages / Tools / Services                                                                                                                                  |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Language**               | [![JavaScript][JavaScript]][JavaScript-url]                                                                                                                   |
-| **Backend**                | [![AWSLambda][AWSLambda]][AWSLambda-url] [![Node.js][Node.js]][Node.js-url] [![APIGateway][APIGateway]][APIGateway-url] [![DynamoDB][DynamoDB]][DynamoDB-url] |
-| **Frontend (User-facing)** | [![AmazonConnect][AmazonConnect]][AmazonConnect-url] [![AmazonLex][AmazonLex]][AmazonLex-url]                                                                 |
-| **Infrastructure**         | [![Serverless][Serverless]][Serverless-url]                                                                                                                   |
-| **APIs**                   | [![OpenWeatherAPI][OpenWeatherAPI]][OpenWeatherAPI-url]                                                                                                       |
+|                            | Languages / Tools / Services                                                                                      |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **Language**               | [![JavaScript][JavaScript]][JavaScript-url]                                                                       |
+| **Backend**                | [![AWSLambda][AWSLambda]][AWSLambda-url] [![Node.js][Node.js]][Node.js-url] [![DynamoDB][DynamoDB]][DynamoDB-url] |
+| **Frontend (User-facing)** | [![AmazonConnect][AmazonConnect]][AmazonConnect-url] [![AmazonLex][AmazonLex]][AmazonLex-url]                     |
+| **Infrastructure**         | [![Serverless][Serverless]][Serverless-url]                                                                       |
+| **APIs**                   | [![OpenWeatherAPI][OpenWeatherAPI]][OpenWeatherAPI-url]                                                           |
 
 <p align="center">
   <img src="images/architecture-diagram.png" alt="Description">
@@ -125,7 +125,7 @@ This application uses single DynamoDB Table usersTable
 
 - userTable stores users' phone number and name information and is primarily used for dynamic greeting
 
-#### Table Attributes
+#### Users Table
 
 | Attribute Name | Attribute Type | Primary Key | Description         |
 | -------------- | -------------- | ----------- | ------------------- |
@@ -133,7 +133,7 @@ This application uses single DynamoDB Table usersTable
 | fName          | String         | No          | User's first name   |
 | lName          | String         | No          | User's last name    |
 
-#### Example Table
+#### Example Users Table
 
 | phoneNumber (String) | fName (String) | lName (String) |
 | -------------------- | -------------- | -------------- |
