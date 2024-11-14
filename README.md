@@ -17,7 +17,7 @@
     <a href="https://github.com/john-jaihyek-choi/contact-center-app"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="tel:+15092604508">Demo: (509) 260-04508</a>
+    <a href="tel:+15092604508">Demo: (509) 260-4508</a>
     ·
     <a href="https://github.com/john-jaihyek-choi/contact-center-app/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     ·
